@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mygallery-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: mygallery-dev
+    ports:
+      - "8081:8081"
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    environment:
+      - NODE_ENV=development
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - EXPO_DEVTOOLS_LISTEN_PORT=19002
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - mygallery-dev-network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+networks:
+  mygallery-dev-network:
+    driver: bridge

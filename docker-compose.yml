@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  mygallery-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mygallery-app
+    ports:
+      - "8081:8081"
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    environment:
+      - NODE_ENV=development
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - mygallery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a reverse proxy for production
+  nginx:
+    image: nginx:alpine
+    container_name: mygallery-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - mygallery-app
+    networks:
+      - mygallery-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+networks:
+  mygallery-network:
+    driver: bridge
+
+volumes:
+  node_modules:
