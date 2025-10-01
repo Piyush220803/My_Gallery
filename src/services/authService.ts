@@ -1,25 +1,8 @@
-import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Platform } from "react-native";
 import { User } from "../types";
-import { GOOGLE_OAUTH_CONFIG, USE_MOCK_AUTH } from "../config/auth";
 
 WebBrowser.maybeCompleteAuthSession();
-
-const EXPO_CLIENT_ID =
-  "450802810743-tsbm60e76qu5355e63sd5un3f3k60gd5.apps.googleusercontent.com";
-
-const GOOGLE_REDIRECT_URI = AuthSession.makeRedirectUri({
-  scheme: "mygallery",
-  path: "oauth",
-});
-
-const discovery = {
-  authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
-  tokenEndpoint: "https://oauth2.googleapis.com/token",
-  revocationEndpoint: "https://oauth2.googleapis.com/revoke",
-};
 
 export class AuthService {
   private static instance: AuthService;
@@ -32,14 +15,11 @@ export class AuthService {
     return AuthService.instance;
   }
 
-  // Generic sign in method that uses mock auth for development
   async signIn(): Promise<User> {
     console.log("Generic signIn called - using mock authentication");
 
-    // Simulate network delay for realistic experience
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    // Generate a random mock user for variety during testing
     const mockUsers = [
       {
         id: "mock-user-123",
