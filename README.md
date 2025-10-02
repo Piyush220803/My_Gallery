@@ -234,10 +234,4 @@ src/
 └── utils/         # Utility functions
 ```
 
-## 📄 License
-
-This project is available under the MIT License.
-
----
-
 **Note**: This application is currently in development mode with mock authentication. For production deployment, implement real authentication and cloud storage solutions.
